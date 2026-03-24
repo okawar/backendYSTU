@@ -32,4 +32,21 @@ router.patch('/:id', validateIdParam, patchMovieValidator, handleValidationError
 // DELETE /:id — удалить фильм
 router.delete('/:id', validateIdParam, movieController.remove);
 
+// all() стоит после конкретных маршрутов, потому что Express проверяет маршруты по порядку.
+// Конкретные методы (GET, POST и т.д.) совпадут первыми, а all() поймает всё остальное.
+
+// Обработка неподдерживаемых методов для /movies
+router.all('/', (req, res) => {
+  res.status(405).json({
+    error: { code: 405, message: `Метод ${req.method} не поддерживается для /movies` },
+  });
+});
+
+// Обработка неподдерживаемых методов для /movies/:id
+router.all('/:id', (req, res) => {
+  res.status(405).json({
+    error: { code: 405, message: `Метод ${req.method} не поддерживается для /movies/${req.params.id}` },
+  });
+});
+
 module.exports = router;
