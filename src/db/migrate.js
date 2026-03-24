@@ -1,5 +1,15 @@
-const pool = require('./pool');
+const { Pool } = require('pg');
 const bcrypt = require('bcryptjs');
+require('dotenv').config();
+
+// Создаём отдельный пул для миграции, чтобы не влиять на основной пул приложения
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+});
 
 async function migrate() {
   try {
@@ -39,7 +49,7 @@ async function migrate() {
   } catch (err) {
     console.error('Ошибка миграции:', err);
   } finally {
-    // Закрываем пул соединений после завершения
+    // Закрываем пул миграции после завершения
     await pool.end();
   }
 }

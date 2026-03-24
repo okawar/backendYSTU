@@ -49,7 +49,7 @@ const updateMovieValidator = [
   directorRule(body('director').notEmpty().withMessage('Режиссёр обязателен')),
   releaseYearRule(body('releaseYear').notEmpty().withMessage('Год выпуска обязателен')),
   ratingRule(body('rating').notEmpty().withMessage('Рейтинг обязателен')),
-  availableRule(body('available').exists({ values: 'falsy' }).withMessage('Доступность обязательна')),
+  availableRule(body('available').exists().withMessage('Доступность обязательна')),
 ];
 
 // Валидация для частичного обновления (PATCH) — все поля необязательны
